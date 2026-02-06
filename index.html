@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>buggy</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #ffc0cb, #ff9ecf);
+        overflow: hidden;
+    }
+
+    /* Stars */
+    .star {
+        position: absolute;
+        border-radius: 50%;
+        background: white;
+        animation: twinkle 2s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        max-width: 400px;
+        animation: fadeIn 2s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+        color: #ff4d94;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 18px;
+        color: #444;
+        min-height: 80px;
+    }
+
+    button {
+        margin: 15px;
+        padding: 12px 25px;
+        font-size: 16px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: none;
+    }
+
+    .yes {
+        background-color: #ff4d94;
+        color: white;
+    }
+
+    .yes:hover {
+        background-color: #ff1a75;
+    }
+
+    .no {
+        background-color: #ddd;
+    }
+
+    #response {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #ff4d94;
+        font-weight: bold;
+        text-align: left;
+        min-height: 150px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Hidden YouTube iframe for background music -->
+<iframe id="bgMusic" width="0" height="0" 
+    src="https://www.youtube.com/embed/85tO0zksGts?autoplay=1&loop=1&playlist=85tO0zksGts" 
+    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<div class="card">
+    <h1>hi, tala ✨</h1>
+    <p id="typeText"></p>
+    <h2 id="valentineQuestion" style="display:none;">will you be my valentine? 💗</h2>
+    <button class="yes" onclick="sayYes()">yes</button>
+    <button class="no" onclick="moveNo(this)">no</button>
+    <div id="response"></div>
+</div>
+
+<script>
+    // Create stars
+    for (let i = 0; i < 800; i++) {
+        let star = document.createElement("div");
+        star.className = "star";
+        let size = Math.random() * 3 + 1;
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+        star.style.top = Math.random() * window.innerHeight + "px";
+        star.style.left = Math.random() * window.innerWidth + "px";
+        star.style.opacity = Math.random();
+        star.style.animationDuration = (Math.random() * 3 + 1) + "s";
+        document.body.appendChild(star);
+    }
+
+    const message = "i just want to let you know that you make every day better. thank you for making me happy and for showing me that love can be gentle and real, i was thinking… ";
+    let index = 0;
+
+    function typeWriter() {
+        if (index < message.length) {
+            document.getElementById("typeText").innerHTML += message.charAt(index);
+            index++;
+            setTimeout(typeWriter, 50);
+        } else {
+            // Show valentine question and buttons
+            document.getElementById("valentineQuestion").style.display = "block";
+            document.querySelector('.yes').style.display = 'inline-block';
+            document.querySelector('.no').style.display = 'inline-block';
+        }
+    }
+
+    window.onload = typeWriter;
+
+    function sayYes() {
+        // Optional: restart YouTube music for Yes click
+        const bgMusic = document.getElementById("bgMusic");
+        bgMusic.src = "https://www.youtube.com/embed/85tO0zksGts?autoplay=1&loop=1&playlist=85tO0zksGts";
+        
+        const poem = `thanks for saying yes, here's a simple verse for you. 
+        
+she laughs like sparks that wont sit still,
+an orange cat with boundless will.
+tala spins joy without a plan,
+chaos soft, but perfectly grand.
+i love the noise she brings to me,
+we match in ways we never see.
+and in her mess i clearly know, i love her more than i can show.`;
+
+        let idx = 0;
+        document.getElementById("response").innerHTML = "";
+
+        function typePoem() {
+            if (idx < poem.length) {
+                let char = poem.charAt(idx);
+                if(char === '\n') char = '<br>';
+                document.getElementById("response").innerHTML += char;
+                idx++;
+                setTimeout(typePoem, 50);
+            }
+        }
+        typePoem();
+
+        // Hide buttons after clicking yes
+        document.querySelector('.yes').style.display = 'none';
+        document.querySelector('.no').style.display = 'none';
+    }
+
+    function moveNo(button) {
+        let x = Math.random() * (window.innerWidth - 100);
+        let y = Math.random() * (window.innerHeight - 50);
+        button.style.position = "absolute";
+        button.style.left = x + "px";
+        button.style.top = y + "px";
+    }
+</script>
+
+</body>
+</html>
